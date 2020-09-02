@@ -1,5 +1,5 @@
-game: game.o board.o color.o lang.o player.o size.o
-	g++ game.o board.o color.o lang.o player.o size.o -std=c++17 -o game
+game: game.o board.o color.o player.o size.o
+	g++ game.o board.o color.o player.o size.o -std=c++17 -o game
 
 game.o: board.hpp
 	g++ game.cpp -std=c++17 -c -o game.o

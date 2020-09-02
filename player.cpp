@@ -22,6 +22,10 @@ Color Player::getColor() {
     return *pColor;
 }
 
+std::string Player::getName(){
+    return *pName;
+}
+
 int Player::getPiecesInHouse(const Size pieceSize){
     short int temp;
     switch (pieceSize)

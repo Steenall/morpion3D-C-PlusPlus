@@ -66,6 +66,7 @@ void lancerLaPartie(){
     bool end =false;
     do{
         cleanDisplay();
+        std::cout << colorToString((*board).getCurrentPlayer().getColor()) << (*board).getCurrentPlayer().getName() << colorToString(Color::WHITE) << "à toi de jouer" << std::endl;
         (*board).affichePlateau();
         std::cout << "Veux tu placer (P), déplacer (D) ou abandonner(A) ?" << std::endl;
         do{
@@ -77,7 +78,7 @@ void lancerLaPartie(){
             char sColonne=saisirColonne();
             int dLine =saisirLigne();
             char dColonne =saisirColonne();
-            (*board).movePiece(sLine-1,sColonne,dLine,dColonne);
+            std::cout << (*board).movePiece(sLine,sColonne,dLine,dColonne) << std::endl;
         }else if(answer=='p'||answer=='P'){
             Size taille=saisirSize();
             int sLine=saisirLigne();

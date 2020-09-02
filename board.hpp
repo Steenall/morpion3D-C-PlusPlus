@@ -16,7 +16,7 @@
             int getWinner();
             //void addPlayer(Player player);
             void affichePlateau();
-            Erreur movePiece(const int sourceLine, const int sourceColumn, const int targetLine, const int targetColumn);
+            Erreur movePiece(const int sourceLine, const char sourceColumn, const int targetLine, const char targetColumn);
             void nextPlayer();
             Erreur placePiece(const Size pieceSize, const int line, const char column);
             ~Board();

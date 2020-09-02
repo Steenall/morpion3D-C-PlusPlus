@@ -10,6 +10,7 @@
             Player();
             Player(const std::string name, const Color color);
             Color getColor();
+            std::string getName();
             int getPiecesInHouse(const Size pieceSize);
             bool retirePiece(const Size pieceSize);
             ~Player();

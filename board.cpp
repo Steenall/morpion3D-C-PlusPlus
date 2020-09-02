@@ -113,12 +113,40 @@ void Board::affichePlateau(){
     }
 }
 
-Erreur Board::movePiece(const int sourceLine, const int sourceColumn, const int targetLine, const int targetColumn){
-    int holderSource=getPlaceHolder(sourceLine,sourceColumn);
-    if(holderSource==-1) return PAS_DE_PIECE;
-    if(holderSource-1!=(*currentPlayer))return PAS_TA_PIECE;
-    Size targetPiece=getPiece(targetLine,targetColumn);
-    Size sourcePiece=getPiece(targetLine,targetColumn);
+Erreur Board::movePiece(const int sourceLine, const char sourceColumn, const int targetLine, const char targetColumn){
+    int tempSColumn=0;
+    switch (sourceColumn){
+        case 'A':
+            break;
+        case 'B':
+            tempSColumn=1;
+            break;
+        case 'C':
+            tempSColumn=2;
+            break;
+        default:
+            return INTERNAL_ERROR;
+    }
+    int tempTColumn=0;
+    switch (targetColumn){
+        case 'A':
+            break;
+        case 'B':
+            tempTColumn=1;
+            break;
+        case 'C':
+            tempTColumn=2;
+            break;
+        default:
+            return INTERNAL_ERROR;
+    }
+    int holderSource=getPlaceHolder(sourceLine,tempSColumn);
+    std::cout << sourceLine << " " << tempSColumn << " "<< targetLine << " "<< tempTColumn << std::endl;
+    if(holderSource==Erreur::PAS_DE_PIECE) return PAS_DE_PIECE;
+    std::cout << holderSource << " " << (*currentPlayer) << std::endl;
+    if(holderSource!=(*currentPlayer))return PAS_TA_PIECE;
+    Size targetPiece=getPiece(sourceLine,tempTColumn);
+    Size sourcePiece=getPiece(sourceLine,tempSColumn);
     if(targetPiece<sourcePiece){ 
         int tempSource;
         switch (sourcePiece){
@@ -132,8 +160,9 @@ Erreur Board::movePiece(const int sourceLine, const int sourceColumn, const int 
                 tempSource=100;
                 break;
         }
-        box[sourceLine*3+sourceColumn]-=tempSource*((*currentPlayer)-1);
-        box[targetLine*3+targetColumn]+=tempSource*((*currentPlayer)-1);
+        box[sourceLine*3+tempSColumn]-=tempSource*(*currentPlayer);
+        std::cout << sourceLine << " " << tempSColumn << " " << targetLine << " " << tempTColumn << std::endl;
+        box[targetLine*3+tempTColumn]+=tempSource*(*currentPlayer);
         nextPlayer();
         return SUCCESS;
     }else return EMPLACEMENT_INDISPONIBLE;

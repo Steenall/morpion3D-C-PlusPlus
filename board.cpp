@@ -72,8 +72,8 @@ Player* Board::getPlayers() const {
 int Board::getWinner(){
     int temp;
     for(int i=0;i<3;i++){
-        //Vérification ligne
         temp=getPlaceHolder(i,0);
+        //Vérification ligne
         if(temp!=-1&&temp==getPlaceHolder(i,1)&&temp==getPlaceHolder(i,2)){
             return temp;
         }

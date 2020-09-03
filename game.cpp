@@ -60,13 +60,36 @@ Size saisirSize(){
     return (Size) (((int) value)-48);
 }
 
+void afficheErreur(Erreur erreur){
+    std:: cout << colorToString(Color::RED) << std::ends;
+    switch (erreur)
+    {
+    case EMPLACEMENT_INDISPONIBLE:
+        std::cout << "Emplacement indisponible" << std::endl;
+        break;
+    case PAS_TA_PIECE:
+        std::cout << "Il ne s'agit pas de ta pièce" << std::endl;
+        break;
+    case PAS_DE_PIECE:
+        std::cout << "Pas de pièce à cet emplacement" << std::endl;
+        break;
+    case PAS_DE_PIECE_DANS_MAISON:
+        std::cout << "Cette pièce n'est pas disponible dans ta maison" << std::endl;
+        break;
+    case INTERNAL_ERROR:
+        std::cout << "Erreur interne" << std::endl;
+        break;
+    }
+    std:: cout << colorToString(Color::WHITE) << std::ends;
+}
+
 void lancerLaPartie(){
     Board (*board)=new Board(creerJoueur(),creerJoueur());
     char answer;
     bool end =false;
+    cleanDisplay();
     do{
-        cleanDisplay();
-        std::cout << colorToString((*board).getCurrentPlayer().getColor()) << (*board).getCurrentPlayer().getName() << colorToString(Color::WHITE) << "à toi de jouer" << std::endl;
+        std::cout << colorToString((*board).getCurrentPlayer().getColor()) << (*board).getCurrentPlayer().getName() << colorToString(Color::WHITE) << ", à toi de jouer" << std::endl;
         (*board).affichePlateau();
         std::cout << "Veux tu placer (P), déplacer (D) ou abandonner(A) ?" << std::endl;
         do{
@@ -78,16 +101,24 @@ void lancerLaPartie(){
             char sColonne=saisirColonne();
             int dLine =saisirLigne();
             char dColonne =saisirColonne();
-            std::cout << (*board).movePiece(sLine,sColonne,dLine,dColonne) << std::endl;
+            Erreur erreur;
+            cleanDisplay();
+            if((erreur=(*board).movePiece(sLine,sColonne,dLine,dColonne))!=0){
+                afficheErreur(erreur);
+            }
         }else if(answer=='p'||answer=='P'){
             Size taille=saisirSize();
             int sLine=saisirLigne();
             char sColonne=saisirColonne();
-            std::cout << (*board).placePiece(taille,sLine,sColonne) << std::endl;
+            Erreur erreur;
+            if((erreur=(*board).placePiece(taille,sLine,sColonne))!=0){
+                afficheErreur(erreur);
+            }
         }else{
             end=true;
         }
-    }while((*board).getWinner()==-1||!end);
+    }while((*board).getWinner()==-1&&!end);
+    std:: cout << "Félicitation " << colorToString((*board).getPlayers()[(*board).getWinner()].getColor()) << (*board).getPlayers()[(*board).getWinner()].getName() << colorToString(Color::WHITE) << ", tu as gagné la partie" << std::endl;
 }
 
 
@@ -104,7 +135,7 @@ void menu(){
         std::cout << "                  | |" << std::endl;
         std::cout << "                  |_|                                " << std::endl;
         end=true;
-        std::cout << "\033[35;01m   Menu\n    \033[34;01m1 - Jouer\n    \033[0;01m2 - Options\n    \033[31;01m3 - Quitter\n\n\033[37;01m" << std::endl;
+        std::cout << "\033[35;01m   Menu\n    \033[34;01m1 - Jouer\n    \033[0;01m2 - Options\n    \033[31;01m3 - Quitter\n\033[37;01m" << std::endl;
         int val=0;
         std::cin >> val;
         std::cin.clear();
@@ -128,15 +159,6 @@ void menu(){
 }
 
 int main(){
-    Player player1= Player("Test1",Color::BLUE);
-    Player player2= Player("Test1",Color::RED);
-    Board board=Board(player1,player2);
-    board.placePiece(Size::SMALL,2,'A');
-    board.placePiece(Size::MEDIUM,2,'A');
-    board.placePiece(Size::SMALL,3,'C');
-    board.placePiece(Size::LARGE,1,'A');
-    board.placePiece(Size::NONE,3,'B');
-    board.affichePlateau();
     menu();
     return 0;
 }

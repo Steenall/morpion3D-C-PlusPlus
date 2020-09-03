@@ -160,9 +160,9 @@ Erreur Board::movePiece(const int sourceLine, const char sourceColumn, const int
                 tempSource=100;
                 break;
         }
-        box[sourceLine*3+tempSColumn]-=tempSource*(*currentPlayer);
+        box[sourceLine*3+tempSColumn]-=tempSource*((*currentPlayer)+1);
         std::cout << sourceLine << " " << tempSColumn << " " << targetLine << " " << tempTColumn << std::endl;
-        box[targetLine*3+tempTColumn]+=tempSource*(*currentPlayer);
+        box[targetLine*3+tempTColumn]+=tempSource*((*currentPlayer)+1);
         nextPlayer();
         return SUCCESS;
     }else return EMPLACEMENT_INDISPONIBLE;

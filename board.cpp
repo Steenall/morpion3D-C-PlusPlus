@@ -88,7 +88,7 @@ int Board::getWinner(){
     if(temp!=-1&&((getPlaceHolder(0,0)==temp&&temp==getPlaceHolder(2,2))||(getPlaceHolder(0,2)==temp&&temp==getPlaceHolder(2,0)))){
         return temp;
     }
-    return -1;
+    return -3;
 }
 
 /*void Board::addPlayer(Player player){
@@ -141,9 +141,7 @@ Erreur Board::movePiece(const int sourceLine, const char sourceColumn, const int
             return INTERNAL_ERROR;
     }
     int holderSource=getPlaceHolder(sourceLine,tempSColumn);
-    std::cout << sourceLine << " " << tempSColumn << " "<< targetLine << " "<< tempTColumn << std::endl;
     if(holderSource==Erreur::PAS_DE_PIECE) return PAS_DE_PIECE;
-    std::cout << holderSource << " " << (*currentPlayer) << std::endl;
     if(holderSource!=(*currentPlayer))return PAS_TA_PIECE;
     Size targetPiece=getPiece(sourceLine,tempTColumn);
     Size sourcePiece=getPiece(sourceLine,tempSColumn);
@@ -161,7 +159,6 @@ Erreur Board::movePiece(const int sourceLine, const char sourceColumn, const int
                 break;
         }
         box[sourceLine*3+tempSColumn]-=tempSource*((*currentPlayer)+1);
-        std::cout << sourceLine << " " << tempSColumn << " " << targetLine << " " << tempTColumn << std::endl;
         box[targetLine*3+tempTColumn]+=tempSource*((*currentPlayer)+1);
         nextPlayer();
         return SUCCESS;
@@ -198,7 +195,7 @@ Erreur Board::placePiece(const Size pieceSize, const int line, const char column
         if(players[(*currentPlayer)].getPiecesInHouse(pieceSize)>0){
             box[line*3+tempColumn]+=temp*((*currentPlayer)+1);
             players[(*currentPlayer)].retirePiece(pieceSize);
-            nextPlayer();
+            nextPlayer();   
             return SUCCESS;
         }else{
             return PAS_DE_PIECE_DANS_MAISON;

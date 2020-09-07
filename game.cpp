@@ -2,6 +2,8 @@
 #include "board.hpp"
 #include "player.hpp"
 #include "color.hpp"
+#include <chrono>
+#include <thread>
 
 void cleanDisplay(){
     std::cout << "\033[H\033[2J"<<std::ends;;
@@ -111,14 +113,18 @@ void lancerLaPartie(){
             int sLine=saisirLigne();
             char sColonne=saisirColonne();
             Erreur erreur;
-            if((erreur=(*board).placePiece(taille,sLine,sColonne))!=0){
+            if((erreur=(*board).placePiece(taille,sLine,sColonne))!=Erreur::SUCCESS){
                 afficheErreur(erreur);
             }
         }else{
             end=true;
         }
-    }while((*board).getWinner()==-1&&!end);
-    std:: cout << "Félicitation " << colorToString((*board).getPlayers()[(*board).getWinner()].getColor()) << (*board).getPlayers()[(*board).getWinner()].getName() << colorToString(Color::WHITE) << ", tu as gagné la partie" << std::endl;
+    }while((*board).getWinner()==-3&&!end);
+    if(!end){
+        (*board).affichePlateau();
+        std:: cout << std::endl << "Félicitation " << colorToString((*board).getPlayers()[(*board).getWinner()].getColor()) << (*board).getPlayers()[(*board).getWinner()].getName() << colorToString(Color::WHITE) << ", tu as gagné la partie" << std::endl;
+        std::this_thread::sleep_for (std::chrono::seconds(5));
+    }
 }
 
 
@@ -134,7 +140,6 @@ void menu(){
         std::cout << "\\_|  |_/\\___/|_|  | .__/|_|\\___/|_| |_| \\____/|___/" << std::endl;
         std::cout << "                  | |" << std::endl;
         std::cout << "                  |_|                                " << std::endl;
-        end=true;
         std::cout << "\033[35;01m   Menu\n    \033[34;01m1 - Jouer\n    \033[0;01m2 - Options\n    \033[31;01m3 - Quitter\n\033[37;01m" << std::endl;
         int val=0;
         std::cin >> val;
@@ -150,12 +155,12 @@ void menu(){
 				break;
 			case 3:
 				std::cout << "\033[H\033[2J" << std::ends;
-				exit(0);
+				end=true;
 			default:
 				std::cout << "\033[H\033[2J" << std::ends;
 				break;
 		}
-    }while(end!=true);
+    }while(!end);
 }
 
 int main(){
